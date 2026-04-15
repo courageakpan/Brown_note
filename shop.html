@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All Fragrances — Brown Note</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Tenor+Sans&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo-wrap" onclick="window.location.href='/'">
+    <span class="nav-logo-main"
+      onmousedown="startPress()" onmouseup="cancelPress()"
+      ontouchstart="startPress()" ontouchend="cancelPress()">
+      Brown Note
+    </span>
+    <span class="nav-logo-tag">Notes that linger</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/shop.html" class="active">Shop All</a></li>
+    <li><a href="/brands.html">Brands</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-search-btn" title="Search">⌕</button>
+    <div class="nav-cart" onclick="checkoutCart()">🛒 <span class="cart-count">0</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+  <a href="/">Home</a>
+  <a href="/shop.html">Shop All</a>
+  <a href="/brands.html">Brands</a>
+  <p class="mobile-menu-tag">Notes that linger</p>
+</div>
+
+<!-- SHOP LIST VIEW -->
+<div id="view-shop">
+  <div class="shop-hero">
+    <div class="shop-hero-inner">
+      <div>
+        <div class="section-label">Brown Note</div>
+        <h1 class="section-title" style="margin-bottom:0">All <em>Fragrances</em></h1>
+      </div>
+      <span class="shop-count" id="shopCount">Loading products...</span>
+    </div>
+    <div class="shop-filters" id="shopFilterTabs">
+      <button class="filter-tab active" onclick="shopFilter(this,'all')">All</button>
+      <button class="filter-tab" onclick="shopFilter(this,'him')">For Him</button>
+      <button class="filter-tab" onclick="shopFilter(this,'her')">For Her</button>
+      <button class="filter-tab" onclick="shopFilter(this,'unisex')">Unisex</button>
+      <button class="filter-tab" onclick="shopFilter(this,'new')">New Arrivals</button>
+    </div>
+  </div>
+  <div class="product-grid shop-grid" id="shopGrid"></div>
+</div>
+
+<!-- PRODUCT DETAIL VIEW -->
+<div id="view-detail" style="display:none;">
+  <button class="detail-back" onclick="showShopView()">← Back to Shop</button>
+  <div class="detail-inner">
+    <div class="detail-gallery">
+      <div class="detail-img-area" id="detailImgArea"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-brand" id="dBrand"></div>
+      <h1 class="detail-name" id="dName"></h1>
+      <p class="detail-type" id="dType"></p>
+      <p class="detail-price" id="dPrice"></p>
+      <div class="detail-divider"></div>
+      <p class="detail-notes-label">Scent Notes</p>
+      <div class="detail-notes" id="dNotes"></div>
+      <p class="detail-desc" id="dDesc"></p>
+      <p class="detail-size-label">Select Size</p>
+      <div class="detail-sizes" id="dSizes"></div>
+      <div class="detail-actions">
+        <button class="detail-add-btn" onclick="addToCartFromDetail()">Add to Cart</button>
+      </div>
+      <div class="payment-info">
+        <p class="payment-info-title">Payment — Bank Transfer Only</p>
+        <div class="payment-info-details">
+          <div>🏦 Moniepoint</div>
+          <div>📋 6333347361</div>
+          <div>👤 Udeme Daniel</div>
+        </div>
+        <p class="payment-info-sub">Add to cart, then complete your order via WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script src="shop.js"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brown Note — Notes that Linger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Tenor+Sans&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner" id="promoBanner">
+  <div class="promo-banner-inner">
+    <span class="promo-banner-emoji" id="bannerEmoji">🎄</span>
+    <span class="promo-banner-text" id="bannerText">Christmas Sale — Up to 30% off selected fragrances</span>
+    <span class="promo-banner-badge" id="bannerBadge">Limited Time</span>
+    <button class="promo-banner-cta" id="bannerCta" onclick="window.location.href='sales.html'">Shop the Sale</button>
+  </div>
+  <button class="promo-banner-close" onclick="dismissBanner()" id="bannerCloseBtn">✕</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo-wrap" onclick="window.location.href='/'">
+    <span class="nav-logo-main"
+      onmousedown="startPress()" onmouseup="cancelPress()"
+      ontouchstart="startPress()" ontouchend="cancelPress()">
+      Brown Note
+    </span>
+    <span class="nav-logo-tag">Notes that linger</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/shop.html">Shop All</a></li>
+    <li><a href="/brands.html">Brands</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-search-btn" title="Search">⌕</button>
+    <div class="nav-cart" onclick="checkoutCart()">🛒 <span class="cart-count">0</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+  <a href="/">Home</a>
+  <a href="/shop.html">Shop All</a>
+  <a href="/brands.html">Brands</a>
+  <p class="mobile-menu-tag">Notes that linger</p>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Curated Fragrance House</div>
+    <h1 class="hero-title">Notes<br>that <em>linger.</em></h1>
+    <p class="hero-brand">Brown Note</p>
+    <p class="hero-sub">The finest fragrances from the world's most celebrated houses — curated for those who understand that scent is the last thing you put on and the first thing people remember.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="window.location.href='shop.html'"><span>Shop Now</span><span class="btn-arrow">→</span></button>
+      <button class="btn-ghost" onclick="window.location.href='brands.html'">Browse Brands</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-noise"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-bottles">
+      <div class="hero-bottle-item">
+        <svg width="86" viewBox="0 0 100 240" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 28px 48px rgba(0,0,0,0.5))">
+          <defs><linearGradient id="hb1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1)"/><stop offset="100%" style="stop-color:rgba(212,175,55,0.14)"/></linearGradient><linearGradient id="hl1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#8a6a30"/><stop offset="100%" style="stop-color:#2e1e08"/></linearGradient></defs>
+          <rect x="36" y="4" width="28" height="30" rx="3" fill="#D4AF37"/><rect x="39" y="34" width="22" height="10" rx="2" fill="#b89a20"/>
+          <rect x="8" y="44" width="84" height="184" rx="12" fill="url(#hb1)" stroke="rgba(212,175,55,0.18)" stroke-width="0.8"/>
+          <rect x="12" y="80" width="76" height="144" rx="10" fill="url(#hl1)"/>
+          <rect x="20" y="102" width="60" height="80" rx="3" fill="rgba(244,241,236,0.07)" stroke="rgba(212,175,55,0.14)" stroke-width="0.5"/>
+          <text x="50" y="128" font-family="serif" font-size="5" fill="#D4AF37" text-anchor="middle" letter-spacing="1.5">BROWN NOTE</text>
+          <text x="50" y="150" font-family="serif" font-size="10" fill="#F4F1EC" text-anchor="middle">Sauvage</text>
+          <text x="50" y="165" font-family="sans-serif" font-size="4" fill="rgba(244,241,236,0.38)" text-anchor="middle" letter-spacing="1">EDP · 100ML</text>
+          <rect x="11" y="50" width="8" height="172" rx="4" fill="rgba(255,255,255,0.04)"/>
+        </svg>
+        <span class="hero-bottle-label">Dior Sauvage</span>
+      </div>
+      <div class="hero-bottle-item">
+        <svg width="106" viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 34px 56px rgba(0,0,0,0.55))">
+          <defs><linearGradient id="hb2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.12)"/><stop offset="100%" style="stop-color:rgba(90,70,52,0.22)"/></linearGradient><linearGradient id="hl2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#5A4634"/><stop offset="100%" style="stop-color:#1e140a"/></linearGradient></defs>
+          <rect x="44" y="5" width="32" height="36" rx="4" fill="#5A4634"/><rect x="48" y="41" width="24" height="12" rx="2" fill="#3e2e1e"/>
+          <rect x="10" y="53" width="100" height="216" rx="14" fill="url(#hb2)" stroke="rgba(212,175,55,0.18)" stroke-width="1"/>
+          <rect x="15" y="95" width="90" height="170" rx="12" fill="url(#hl2)"/>
+          <rect x="26" y="118" width="68" height="96" rx="4" fill="rgba(244,241,236,0.07)" stroke="rgba(212,175,55,0.16)" stroke-width="0.7"/>
+          <text x="60" y="148" font-family="serif" font-size="5.5" fill="#D4AF37" text-anchor="middle" letter-spacing="1.8">BROWN NOTE</text>
+          <line x1="32" y1="157" x2="88" y2="157" stroke="rgba(212,175,55,0.22)" stroke-width="0.6"/>
+          <text x="60" y="178" font-family="serif" font-size="12" fill="#F4F1EC" text-anchor="middle" font-weight="300">Heritage</text>
+          <text x="60" y="195" font-family="sans-serif" font-size="4.5" fill="rgba(244,241,236,0.38)" text-anchor="middle" letter-spacing="1.2">EAU DE PARFUM</text>
+          <rect x="13" y="60" width="10" height="202" rx="5" fill="rgba(255,255,255,0.04)"/>
+        </svg>
+        <span class="hero-bottle-label">Tom Ford Heritage</span>
+      </div>
+      <div class="hero-bottle-item">
+        <svg width="80" viewBox="0 0 95 230" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 26px 46px rgba(0,0,0,0.5))">
+          <defs><linearGradient id="hb3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.88)"/><stop offset="100%" style="stop-color:rgba(200,160,100,0.5)"/></linearGradient><linearGradient id="hl3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#e0c898"/><stop offset="100%" style="stop-color:#9a7040"/></linearGradient></defs>
+          <rect x="33" y="4" width="29" height="27" rx="3" fill="#5A4634"/><rect x="37" y="31" width="21" height="9" rx="2" fill="#3e2e1e"/>
+          <rect x="8" y="40" width="79" height="180" rx="11" fill="url(#hb3)" stroke="rgba(255,255,255,0.42)" stroke-width="0.8"/>
+          <rect x="12" y="76" width="71" height="140" rx="9" fill="url(#hl3)" opacity="0.65"/>
+          <rect x="20" y="96" width="55" height="76" rx="3" fill="rgba(255,255,255,0.84)"/>
+          <text x="47" y="118" font-family="serif" font-size="4.8" fill="#5A4634" text-anchor="middle" letter-spacing="1.4">BROWN NOTE</text>
+          <text x="47" y="138" font-family="serif" font-size="10" fill="#0B0B0B" text-anchor="middle">Chance</text>
+          <text x="47" y="152" font-family="sans-serif" font-size="4" fill="#7a6252" text-anchor="middle" letter-spacing="1">EDP · 50ML</text>
+          <rect x="10" y="46" width="8" height="168" rx="4" fill="rgba(255,255,255,0.26)"/>
+        </svg>
+        <span class="hero-bottle-label">Chanel Chance</span>
+      </div>
+    </div>
+    <div class="hero-scroll-hint"><div class="scroll-line"></div><span>Scroll</span></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">For Him</span><span class="marquee-item">For Her</span><span class="marquee-item">Unisex</span><span class="marquee-item">Notes that Linger</span><span class="marquee-item">Free Delivery Over ₦50,000</span><span class="marquee-item">100% Authentic</span><span class="marquee-item">Eau de Parfum · Parfum · EDT</span>
+    <span class="marquee-item">For Him</span><span class="marquee-item">For Her</span><span class="marquee-item">Unisex</span><span class="marquee-item">Notes that Linger</span><span class="marquee-item">Free Delivery Over ₦50,000</span><span class="marquee-item">100% Authentic</span><span class="marquee-item">Eau de Parfum · Parfum · EDT</span>
+  </div>
+</div>
+
+<!-- BRANDS STRIP -->
+<div class="brands-strip fade-up">
+  <div class="brands-strip-inner">
+    <span class="brands-label">Brands We Carry</span>
+    <div class="brands-logos">
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Dior</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Chanel</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Tom Ford</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">YSL</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Creed</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Hermès</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Gucci</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Valentino</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Givenchy</span>
+      <span class="brand-logo-item" onclick="window.location.href='brands.html'">Jo Malone</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED PRODUCTS -->
+<section class="products">
+  <div class="products-header fade-up">
+    <div>
+      <div class="section-label">Curated Selection</div>
+      <h2 class="section-title">Featured <em>Fragrances</em></h2>
+    </div>
+    <button class="view-all" onclick="window.location.href='shop.html'">View all →</button>
+  </div>
+  <div class="filter-tabs fade-up" id="homeFilterTabs">
+    <button class="filter-tab active" onclick="filterProducts(this,'all')">All</button>
+    <button class="filter-tab" onclick="filterProducts(this,'him')">For Him</button>
+    <button class="filter-tab" onclick="filterProducts(this,'her')">For Her</button>
+    <button class="filter-tab" onclick="filterProducts(this,'unisex')">Unisex</button>
+  </div>
+  <div class="product-grid fade-up" id="homePGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="about-visual">
+    <div class="about-bg-text">BN</div>
+    <div class="about-visual-inner">
+      <div class="about-stat"><div class="about-stat-num">50+</div><div class="about-stat-label">Brands Stocked</div></div>
+      <div class="about-stat"><div class="about-stat-num">100%</div><div class="about-stat-label">Authentic Guaranteed</div></div>
+      <div class="about-stat"><div class="about-stat-num">1,200+</div><div class="about-stat-label">Happy Customers</div></div>
+    </div>
+  </div>
+  <div class="about-content">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title">Where <em>great</em><br>scents live</h2>
+    <p class="about-body">Brown Note is a curated fragrance boutique stocking the world's most beloved perfume houses — from timeless classics to niche discoveries. Every bottle we carry is 100% authentic, sourced with care and delivered with intention.</p>
+    <p class="about-body">We believe that the right fragrance doesn't just smell good — it tells your story, marks your moments, and lingers long after you've left the room.</p>
+    <button class="btn-outline-light" onclick="window.location.href='brands.html'">Explore brands <span>→</span></button>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="fade-up" style="margin-bottom:48px">
+    <div class="section-label">Simple Process</div>
+    <h2 class="section-title">How it <em>works</em></h2>
+  </div>
+  <div class="how-grid fade-up">
+    <div class="how-card"><div class="how-num">01</div><h3 class="how-title">Browse & Discover</h3><p class="how-desc">Explore our curated collection of over 50 fragrance brands. Filter by gender, note family, or house to find your perfect match.</p></div>
+    <div class="how-card"><div class="how-num">02</div><h3 class="how-title">Place Your Order</h3><p class="how-desc">Message us on WhatsApp with your chosen fragrance and size. Transfer payment to Moniepoint · 6333347361 · Udeme Daniel, then send your receipt.</p></div>
+    <div class="how-card"><div class="how-num">03</div><h3 class="how-title">Delivered to You</h3><p class="how-desc">Your fragrance is carefully packaged and dispatched. Free delivery within Nigeria on orders over ₦50,000.</p></div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="fade-up" style="margin-bottom:48px">
+    <div class="section-label">Explore</div>
+    <h2 class="section-title">Shop by <em>category</em></h2>
+  </div>
+  <div class="categories-grid fade-up">
+    <div class="cat-card" onclick="window.location.href='shop.html?cat=him'">
+      <div class="cat-bg" style="background:linear-gradient(160deg,#3a2818 0%,#2a1a0e 100%)"></div>
+      <div class="cat-overlay"></div><div class="cat-gold-border"></div>
+      <div class="cat-info"><h3 class="cat-name">For Him</h3><p class="cat-count" id="himCount">Loading...</p></div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='shop.html?cat=her'">
+      <div class="cat-bg" style="background:linear-gradient(160deg,#4a3020 0%,#38221a 100%)"></div>
+      <div class="cat-overlay"></div><div class="cat-gold-border"></div>
+      <div class="cat-info"><h3 class="cat-name">For Her</h3><p class="cat-count" id="herCount">Loading...</p></div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='shop.html?cat=unisex'">
+      <div class="cat-bg" style="background:linear-gradient(160deg,#36261a 0%,#2a1c10 100%)"></div>
+      <div class="cat-overlay"></div><div class="cat-gold-border"></div>
+      <div class="cat-info"><h3 class="cat-name">Unisex</h3><p class="cat-count" id="unisexCount">Loading...</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label fade-up">Customer Love</div>
+  <h2 class="section-title fade-up">Notes that <em>stay</em></h2>
+  <p class="testimonials-sub fade-up">What our customers say about Brown Note.</p>
+  <div class="testimonials-track">
+    <div class="testimonial-card fade-up"><div class="stars">★★★★★</div><p class="testimonial-text">Ordered Sauvage EDP and it arrived within 2 days, perfectly packaged. 100% authentic — exactly what I was looking for. Brown Note is my go-to now.</p><p class="testimonial-author">— Tunde B., Lagos</p></div>
+    <div class="testimonial-card fade-up" style="transition-delay:.1s"><div class="stars">★★★★★</div><p class="testimonial-text">Finally a fragrance store in Nigeria I can trust. Got Chanel Chance for my wife's birthday. She was thrilled. Will definitely shop here again.</p><p class="testimonial-author">— Kelechi M., Enugu</p></div>
+    <div class="testimonial-card fade-up" style="transition-delay:.2s"><div class="stars">★★★★★</div><p class="testimonial-text">The Tom Ford selection is incredible. I love that they carry niche brands alongside classics. Customer service was warm and responsive.</p><p class="testimonial-author">— Fatima A., Abuja</p></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-bg-text">BN</div>
+  <div class="newsletter-content">
+    <div class="newsletter-tag">Stay in the know</div>
+    <h2 class="newsletter-title">Get first access to <em>new arrivals</em></h2>
+    <p class="newsletter-sub">New drops, exclusive discounts & fragrance guides — straight to your inbox.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" placeholder="Your email address">
+      <button class="newsletter-submit" onclick="showToast('Subscribed! Welcome to Brown Note ✦')">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-gold-line"></div>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-main">Brown Note</div>
+      <div class="footer-brand-tag">Notes that linger</div>
+      <p class="footer-brand-desc">A curated fragrance boutique stocking the world's finest perfume houses. 100% authentic. Always.</p>
+      <div class="footer-social">
+        <a href="#">X</a><a href="#">ig</a><a href="#">fb</a><a href="#">tk</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-links">
+        <li><a href="/shop.html">All Fragrances</a></li>
+        <li><a href="/shop.html?cat=him">For Him</a></li>
+        <li><a href="/shop.html?cat=her">For Her</a></li>
+        <li><a href="/shop.html?cat=unisex">Unisex</a></li>
+        <li><a href="/shop.html?cat=new">New Arrivals</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Brands</p>
+      <ul class="footer-links">
+        <li><a href="/brands.html">Dior</a></li>
+        <li><a href="/brands.html">Chanel</a></li>
+        <li><a href="/brands.html">Tom Ford</a></li>
+        <li><a href="/brands.html">YSL</a></li>
+        <li><a href="/brands.html">All Brands →</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Help</p>
+      <ul class="footer-links">
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="#">Authenticity Guarantee</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+      <div style="margin-top:20px;padding:14px 16px;border:1px solid rgba(90,70,52,.25);background:rgba(212,175,55,.05);">
+        <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Payment</p>
+        <p style="font-size:11px;color:var(--muted);line-height:1.7;">Bank transfer only.<br>
+        <span style="color:var(--white);font-family:'Cinzel',serif;letter-spacing:.1em;font-size:12px;">6333347361</span><br>
+        Moniepoint · Udeme Daniel</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Brown Note. All rights reserved.</span>
+    <span class="footer-copy">Privacy Policy · Terms of Service</span>
+  </div>
+</footer>
+
+<!-- Owner float (shown after login) -->
+<div class="owner-float" id="ownerFloat" style="display:none;">
+  <button class="owner-float-btn" onclick="window.location.href='admin.html'" title="Product Manager">🔒</button>
+  <div class="owner-float-tip">Owner Panel</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

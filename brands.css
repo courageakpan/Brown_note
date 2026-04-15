@@ -1,0 +1,71 @@
+/* brands.css — Brands page styles */
+
+.brands-page {
+  padding: 120px 72px 100px;
+}
+.brands-search-bar {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--brown-pale);
+  margin-bottom: 52px;
+  max-width: 480px;
+}
+.brands-search-input {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 12px;
+  outline: none;
+  color: var(--black);
+}
+.brands-search-input::placeholder { color: var(--muted); }
+.brands-search-btn {
+  padding: 14px 20px;
+  background: var(--brown);
+  border: none;
+  color: var(--white);
+  cursor: pointer !important;
+  font-size: 14px;
+}
+.brand-alphabet-section { margin-bottom: 44px; }
+.brand-alpha-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--brown-pale);
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--brown-pale);
+  padding-bottom: 8px;
+}
+.brand-alpha-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.brand-alpha-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  border: 1px solid var(--brown-pale);
+  cursor: pointer !important;
+  transition: all .3s;
+  text-decoration: none;
+}
+.brand-alpha-item:hover { border-color: var(--gold); background: var(--off-white); }
+.brand-alpha-name {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: .2em;
+  color: var(--brown);
+  text-transform: uppercase;
+}
+.brand-alpha-count { font-size: 10px; color: var(--muted); font-style: italic; }
+
+@media (max-width: 900px) {
+  .brands-page { padding: 110px 24px 80px; }
+  .brand-alpha-list { grid-template-columns: 1fr 1fr; }
+}

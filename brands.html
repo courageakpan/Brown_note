@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brands — Brown Note</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Tenor+Sans&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="brands.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo-wrap" onclick="window.location.href='/'">
+    <span class="nav-logo-main"
+      onmousedown="startPress()" onmouseup="cancelPress()"
+      ontouchstart="startPress()" ontouchend="cancelPress()">
+      Brown Note
+    </span>
+    <span class="nav-logo-tag">Notes that linger</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/shop.html">Shop All</a></li>
+    <li><a href="/brands.html" class="active">Brands</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-search-btn" title="Search">⌕</button>
+    <div class="nav-cart" onclick="checkoutCart()">🛒 <span class="cart-count">0</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+  <a href="/">Home</a>
+  <a href="/shop.html">Shop All</a>
+  <a href="/brands.html">Brands</a>
+  <p class="mobile-menu-tag">Notes that linger</p>
+</div>
+
+<!-- BRANDS PAGE -->
+<div class="brands-page">
+  <div class="section-label">All Houses</div>
+  <h1 class="section-title">Our <em>Brands</em></h1>
+  <div class="brands-search-bar">
+    <input class="brands-search-input" placeholder="Search brands…" oninput="filterBrands(this.value)" id="brandsSearch">
+    <button class="brands-search-btn">⌕</button>
+  </div>
+  <div id="brandsDirectory"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script src="brands.js"></script>
+</body>
+</html>

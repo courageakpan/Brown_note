@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Brown Note</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Tenor+Sans&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo-wrap" onclick="window.location.href='/'">
+    <span class="nav-logo-main">Brown Note</span>
+    <span class="nav-logo-tag">Notes that linger</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/shop.html">Shop All</a></li>
+    <li><a href="/brands.html">Brands</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-cart" onclick="checkoutCart()">🛒 <span class="cart-count">0</span></div>
+  </div>
+</nav>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header" style="margin-bottom:24px;">
+      <div>
+        <p style="font-size:9px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Owner Access</p>
+        <h2 class="modal-title">Product Manager</h2>
+      </div>
+      <button class="modal-close" onclick="window.location.href='/'">✕</button>
+    </div>
+    <div class="admin-field" style="margin-bottom:20px;">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter owner password" onkeydown="if(event.key==='Enter')checkLogin()">
+    </div>
+    <p id="loginError" style="font-size:11px;color:#c0392b;margin-bottom:16px;display:none;">Incorrect password. Try again.</p>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="window.location.href='/'">Cancel</button>
+      <button class="modal-btn-save" onclick="checkLogin()">Enter</button>
+    </div>
+    <p style="font-size:10px;color:var(--muted);margin-top:20px;text-align:center;font-style:italic;">This area is for the Brown Note team only.</p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL (shown after login) -->
+<div id="adminPanel" style="display:none;">
+
+  <!-- ADMIN PAGE -->
+  <div id="view-admin" class="admin-page">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <h1 class="admin-title">Product Manager</h1>
+        <p class="admin-sub">Add new fragrances, upload photos, and manage your catalogue.</p>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+        <button class="btn-primary" onclick="openAddModal()"><span>+ Add New Product</span></button>
+        <button class="btn-ghost" onclick="showAdminView('promo')">🎯 Sales & Promotions</button>
+        <button class="btn-ghost" onclick="window.location.href='shop.html'">View Live Shop →</button>
+        <button onclick="ownerLogout()" class="logout-btn">🔒 Log Out</button>
+      </div>
+    </div>
+    <div class="section-label" style="margin-bottom:20px;">Your Products</div>
+    <div class="admin-products-list" id="adminProductList"></div>
+  </div>
+
+  <!-- PROMO PAGE -->
+  <div id="view-promo" class="promo-admin-page" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <h1 class="admin-title">Sales & Promotions</h1>
+        <p class="admin-sub">Create seasonal sales, set discounts, and schedule your promotions.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn-ghost" onclick="showAdminView('admin')">← Product Manager</button>
+        <button class="btn-ghost" onclick="window.location.href='sales.html'">Preview Sale Page →</button>
+      </div>
+    </div>
+
+    <div class="promo-live-indicator" id="promoLiveIndicator">
+      <span class="promo-live-dot" id="promoLiveDot"></span>
+      <span id="promoLiveText">No active promotion</span>
+    </div>
+
+    <div class="promo-tabs">
+      <button class="promo-tab active" onclick="switchPromoTab(this,'campaign')">🎯 Campaign</button>
+      <button class="promo-tab" onclick="switchPromoTab(this,'banner')">📢 Banner</button>
+      <button class="promo-tab" onclick="switchPromoTab(this,'discounts')">🏷 Discounts</button>
+      <button class="promo-tab" onclick="switchPromoTab(this,'products')">📦 Sale Products</button>
+    </div>
+
+    <!-- CAMPAIGN TAB -->
+    <div class="promo-tab-content active" id="promoTab-campaign">
+      <div class="promo-form-card">
+        <h2 class="promo-form-title">Campaign Details</h2>
+        <p class="promo-form-sub">Set the name, theme, and schedule for your sale.</p>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Campaign Name *</label><input id="promoName" placeholder="e.g. Valentine's Day Sale" oninput="updatePromoPreview()"></div>
+          <div class="admin-field"><label>Emoji / Icon</label><input id="promoEmoji" placeholder="e.g. 💝" maxlength="4" oninput="updatePromoPreview()" style="font-size:20px;"></div>
+        </div>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Page Title *</label><input id="promoTitle" placeholder="e.g. Valentine's Sale" oninput="updatePromoPreview()"></div>
+          <div class="admin-field"><label>Italic accent word</label><input id="promoTitleEm" placeholder="e.g. Sale" oninput="updatePromoPreview()"></div>
+        </div>
+        <div class="admin-field" style="margin-bottom:16px;"><label>Subtitle / Tagline</label><input id="promoSub" placeholder="e.g. Scents for the one you love — up to 25% off." oninput="updatePromoPreview()"></div>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Sale Ends (date & time)</label><input id="promoEndDate" type="datetime-local" oninput="updatePromoPreview()"></div>
+          <div class="admin-field"><label>Status</label>
+            <select id="promoStatus" onchange="updatePromoPreview()">
+              <option value="off">Off — hidden from customers</option>
+              <option value="on">Live — visible to customers</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px;">Hero Background Colour</label>
+          <div class="color-swatches" id="heroColorSwatches">
+            <div class="color-swatch selected" style="background:#2a1a0e;" data-color="#2a1a0e" onclick="pickHeroColor(this)"></div>
+            <div class="color-swatch" style="background:#4a1020;" data-color="#4a1020" onclick="pickHeroColor(this)"></div>
+            <div class="color-swatch" style="background:#1a2a1a;" data-color="#1a2a1a" onclick="pickHeroColor(this)"></div>
+            <div class="color-swatch" style="background:#1a1a3a;" data-color="#1a1a3a" onclick="pickHeroColor(this)"></div>
+            <div class="color-swatch" style="background:#3a2800;" data-color="#3a2800" onclick="pickHeroColor(this)"></div>
+            <div class="color-swatch" style="background:#2a2a2a;" data-color="#2a2a2a" onclick="pickHeroColor(this)"></div>
+            <input type="color" value="#2a1a0e" id="heroColorCustom" onchange="pickHeroColorCustom(this)" style="width:32px;height:32px;border-radius:50%;cursor:pointer !important;border:3px solid transparent;padding:0;" title="Custom colour">
+          </div>
+        </div>
+        <div class="promo-preview-box">
+          <div class="promo-preview-label">Live Preview — Campaign Header</div>
+          <div id="campaignPreview" style="padding:36px 28px;text-align:center;background:#2a1a0e;transition:background .4s;">
+            <div style="font-size:36px;margin-bottom:10px;" id="prevEmoji">🎄</div>
+            <div style="font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;" id="prevLabel">Special Offer</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--white);margin-bottom:8px;" id="prevTitle">Christmas <em style="font-style:italic;color:var(--gold);">Sale</em></div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:rgba(244,241,236,.7);" id="prevSub">Up to 30% off on selected fragrances.</div>
+          </div>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="admin-save-btn" onclick="saveCampaign()">Save Campaign</button>
+          <button onclick="clearCampaign()" class="clear-btn">Clear & Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNER TAB -->
+    <div class="promo-tab-content" id="promoTab-banner">
+      <div class="promo-form-card">
+        <h2 class="promo-form-title">Site-wide Banner</h2>
+        <p class="promo-form-sub">This strip appears at the top of the home page to alert customers about your sale.</p>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Banner Message</label><input id="bannerMsg" placeholder="e.g. 💝 Valentine's Day Sale — up to 25% off" oninput="updateBannerPreview()"></div>
+          <div class="admin-field"><label>Badge Text</label><input id="bannerBadgeText" placeholder="e.g. Ends Sunday" oninput="updateBannerPreview()"></div>
+        </div>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Button Text</label><input id="bannerBtnText" placeholder="e.g. Shop the Sale" oninput="updateBannerPreview()"></div>
+          <div class="admin-field"><label>Banner Colour</label>
+            <select id="bannerColor" onchange="updateBannerPreview()">
+              <option value="var(--brown)">Rich Brown (default)</option>
+              <option value="#8b1a2a">Deep Red — Valentine's / Christmas</option>
+              <option value="#1a3a1a">Forest Green — Christmas</option>
+              <option value="#1a1a3a">Midnight Blue — New Year</option>
+              <option value="#3a2800">Dark Gold — Black Friday / Eid</option>
+              <option value="#2a2a2a">Charcoal — General sale</option>
+            </select>
+          </div>
+        </div>
+        <div class="promo-preview-box">
+          <div class="promo-preview-label">Live Preview — Banner Strip</div>
+          <div id="bannerPreviewBox" style="padding:13px 24px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;background:var(--brown);transition:background .4s;position:relative;">
+            <span id="bpText" style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:white;">Christmas Sale — Up to 30% off selected fragrances</span>
+            <span id="bpBadge" style="font-family:'Tenor Sans',sans-serif;font-size:8px;letter-spacing:.26em;text-transform:uppercase;padding:5px 12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:white;">Limited Time</span>
+            <span id="bpBtn" style="font-family:'Tenor Sans',sans-serif;font-size:8px;letter-spacing:.26em;text-transform:uppercase;padding:6px 14px;background:rgba(255,255,255,.92);color:#0B0B0B;cursor:pointer !important;">Shop the Sale</span>
+          </div>
+        </div>
+        <div style="margin-top:24px;"><button class="admin-save-btn" onclick="saveBanner()">Save Banner</button></div>
+      </div>
+    </div>
+
+    <!-- DISCOUNTS TAB -->
+    <div class="promo-tab-content" id="promoTab-discounts">
+      <div class="promo-form-card">
+        <h2 class="promo-form-title">Discount Settings</h2>
+        <p class="promo-form-sub">Set a global discount for all sale products.</p>
+        <div class="admin-form-row">
+          <div class="admin-field"><label>Global Discount %</label><input id="globalDiscount" type="number" min="0" max="90" placeholder="e.g. 20" oninput="updateDiscountPreview()"></div>
+          <div class="admin-field"><label>Discount Label</label><input id="discountLabel" placeholder="e.g. 20% OFF · Holiday Sale" oninput="updateDiscountPreview()"></div>
+        </div>
+        <div class="promo-preview-box" style="margin-top:20px;">
+          <div class="promo-preview-label">How it looks on a product card</div>
+          <div style="padding:20px 24px;background:var(--white);display:flex;align-items:center;gap:16px;">
+            <div>
+              <div style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Dior</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--black);margin-bottom:3px;">Sauvage</div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--brown);" id="discPricePreview">₦38,000</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--muted);text-decoration:line-through;" id="discOrigPreview" style="display:none;"></span>
+                <span class="discount-tag" id="discTagPreview" style="display:none;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:24px;"><button class="admin-save-btn" onclick="saveDiscounts()">Save Discounts</button></div>
+      </div>
+    </div>
+
+    <!-- SALE PRODUCTS TAB -->
+    <div class="promo-tab-content" id="promoTab-products">
+      <div class="promo-form-card">
+        <h2 class="promo-form-title">Select Sale Products</h2>
+        <p class="promo-form-sub">Choose which fragrances appear on the sale page.</p>
+        <div class="promo-product-picker" id="promoProductPicker"></div>
+        <div style="margin-top:24px;"><button class="admin-save-btn" onclick="saveSaleProducts()">Save Selection</button></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end adminPanel -->
+
+<!-- ADD / EDIT PRODUCT MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Add New Fragrance</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalImageSection">
+      <p style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Product Photo</p>
+      <div class="modal-upload-zone" id="modalUploadZone">
+        <input type="file" accept="image/*" onchange="handleModalImage(this)">
+        <span style="font-size:26px;display:block;margin-bottom:8px;">📷</span>
+        <p style="font-size:11px;color:var(--muted);">Click or drag to upload product image<br><span style="font-size:10px;opacity:.7">JPG, PNG, WEBP — max 10MB</span></p>
+      </div>
+      <div class="modal-preview" id="modalPreview" style="display:none;">
+        <img id="modalPreviewImg" src="" alt="Preview">
+        <button style="margin-top:8px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;background:none;border:none;color:var(--muted);cursor:pointer !important;" onclick="clearModalImage()">✕ Remove image</button>
+      </div>
+    </div>
+    <div style="margin-top:22px;">
+      <div class="admin-form-row">
+        <div class="admin-field"><label>Brand *</label><input id="mBrand" placeholder="e.g. Dior"></div>
+        <div class="admin-field"><label>Fragrance Name *</label><input id="mName" placeholder="e.g. Sauvage"></div>
+      </div>
+      <div class="admin-form-row">
+        <div class="admin-field"><label>Type</label><select id="mType"><option>Eau de Parfum</option><option>Eau de Toilette</option><option>Parfum</option><option>Eau de Cologne</option></select></div>
+        <div class="admin-field"><label>Category</label><select id="mCat"><option value="him">For Him</option><option value="her">For Her</option><option value="unisex">Unisex</option></select></div>
+      </div>
+      <div class="admin-form-row">
+        <div class="admin-field"><label>Price (₦) *</label><input id="mPrice" type="number" placeholder="e.g. 38000"></div>
+        <div class="admin-field"><label>Sizes (comma separated)</label><input id="mSizes" placeholder="e.g. 50ml, 100ml"></div>
+      </div>
+      <div class="admin-field" style="margin-bottom:16px;"><label>Scent Notes (comma separated)</label><input id="mNotes" placeholder="e.g. Bergamot, Ambroxan, Cedar"></div>
+      <div class="admin-field" style="margin-bottom:8px;"><label>Description</label><textarea id="mDesc" placeholder="Describe this fragrance..."></textarea></div>
+      <div class="admin-form-row">
+        <div class="admin-field"><label>Tag</label><select id="mTag"><option value="">None</option><option value="Best Seller">Best Seller</option><option value="New In">New In</option><option value="Limited">Limited</option></select></div>
+        <div class="admin-field"><label>Background Colour</label><input id="mBg" type="color" value="#3a2818" style="height:44px;cursor:pointer !important;"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn-save" onclick="saveProduct()">Save Fragrance</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="shared.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

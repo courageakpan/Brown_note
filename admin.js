@@ -85,18 +85,74 @@ function renderAdminList() {
   });
 }
 
+// ── Image compression before save ──
+function compressImage(file, maxWidth = 800, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+
+        // Scale down if wider than maxWidth
+        if (w > maxWidth) {
+          h = Math.round(h * maxWidth / w);
+          w = maxWidth;
+        }
+
+        canvas.width  = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function uploadProductImage(id, input) {
   if (!input.files[0]) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const products = loadProducts();
-    const p = products.find(x => x.id === id);
-    if (p) p.image = e.target.result;
-    saveProducts(products);
-    renderAdminList();
-    showToast('Photo saved ✦');
-  };
-  reader.readAsDataURL(input.files[0]);
+  const file = input.files[0];
+
+  showToast('Saving photo…');
+
+  compressImage(file)
+    .then(imageData => {
+      let products = loadProducts();
+      const idx = products.findIndex(x => x.id === id);
+      if (idx === -1) { showToast('Product not found'); return; }
+
+      products[idx].image = imageData;
+
+      try {
+        saveProducts(products);
+        showToast('Photo saved ✦ — visible to customers now');
+      } catch (e) {
+        // localStorage full
+        showToast('Storage full — try a smaller image or remove old ones');
+        console.error('localStorage save failed:', e);
+        return;
+      }
+
+      renderAdminList();
+    })
+    .catch(() => showToast('Failed to read image'));
+}
+
+function handleModalImage(input) {
+  const file = input.files ? input.files[0] : null;
+  if (!file) return;
+
+  compressImage(file).then(imageData => {
+    modalImageData = imageData;
+    document.getElementById('modalPreviewImg').src = imageData;
+    document.getElementById('modalPreview').style.display = 'block';
+    document.getElementById('modalUploadZone').style.display = 'none';
+  }).catch(() => showToast('Failed to read image'));
 }
 
 function deleteProduct(id) {

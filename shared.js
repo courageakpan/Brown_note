@@ -38,7 +38,12 @@ function loadProducts() {
 }
 
 function saveProducts(products) {
-  localStorage.setItem('products', JSON.stringify(products));
+  try {
+    localStorage.setItem('products', JSON.stringify(products));
+  } catch (e) {
+    console.error('saveProducts failed — localStorage full?', e);
+    throw e; // re-throw so callers can catch it
+  }
 }
 
 // ── Cart — persisted in sessionStorage so it survives page navigation ──

@@ -2,6 +2,29 @@
 
 const OWNER_PASSWORD_HASH = 'YnJvd25ub3RlMjAyNQ=='; // base64 of "brownnote2025"
 
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+
+  formData.append('file', file);
+
+  formData.append(
+    'upload_preset',
+    'brownnote_unsigned'
+  );
+
+  const response = await fetch(
+    'https://api.cloudinary.com/v1_1/db1zdfo3j/image/upload',
+    {
+      method: 'POST',
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  return data.secure_url;
+}
+
 let editingId       = null;
 let modalImageData  = null;
 let activeCampaign  = null;
@@ -85,75 +108,46 @@ function renderAdminList() {
   });
 }
 
-// ── Image compression before save ──
-function compressImage(file, maxWidth = 800, quality = 0.82) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
 
-        // Scale down if wider than maxWidth
-        if (w > maxWidth) {
-          h = Math.round(h * maxWidth / w);
-          w = maxWidth;
-        }
 
-        canvas.width  = w;
-        canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+async function uploadProductImage(id, input) {
 
-function uploadProductImage(id, input) {
   if (!input.files[0]) return;
+
   const file = input.files[0];
 
-  showToast('Saving photo…');
+  showToast('Uploading photo…');
 
-  compressImage(file)
-    .then(imageData => {
-      let products = loadProducts();
-      const idx = products.findIndex(x => x.id === id);
-      if (idx === -1) { showToast('Product not found'); return; }
+  try {
 
-      products[idx].image = imageData;
+    const imageUrl = await uploadToCloudinary(file);
 
-      try {
-        saveProducts(products);
-        showToast('Photo saved ✦ — visible to customers now');
-      } catch (e) {
-        // localStorage full
-        showToast('Storage full — try a smaller image or remove old ones');
-        console.error('localStorage save failed:', e);
-        return;
-      }
+    let products = loadProducts();
 
-      renderAdminList();
-    })
-    .catch(() => showToast('Failed to read image'));
+    const idx = products.findIndex(x => x.id === id);
+
+    if (idx === -1) {
+      showToast('Product not found');
+      return;
+    }
+
+    products[idx].image = imageUrl;
+
+    saveProducts(products);
+
+    renderAdminList();
+
+    showToast('Photo uploaded ✦');
+
+  } catch (err) {
+
+    console.error(err);
+
+    showToast('Upload failed');
+
+  }
 }
 
-function handleModalImage(input) {
-  const file = input.files ? input.files[0] : null;
-  if (!file) return;
-
-  compressImage(file).then(imageData => {
-    modalImageData = imageData;
-    document.getElementById('modalPreviewImg').src = imageData;
-    document.getElementById('modalPreview').style.display = 'block';
-    document.getElementById('modalUploadZone').style.display = 'none';
-  }).catch(() => showToast('Failed to read image'));
-}
 
 function deleteProduct(id) {
   if (!confirm('Remove this fragrance from your catalogue?')) return;
@@ -209,22 +203,52 @@ function closeModal() {
   modalImageData = null;
 }
 
-function handleModalImage(input) {
-  if (!input.files[0]) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    modalImageData = e.target.result;
-    document.getElementById('modalPreviewImg').src = e.target.result;
-    document.getElementById('modalPreview').style.display = 'block';
-    document.getElementById('modalUploadZone').style.display = 'none';
-  };
-  reader.readAsDataURL(input.files[0]);
-}
+
 
 function clearModalImage() {
   modalImageData = null;
   document.getElementById('modalPreview').style.display = 'none';
   document.getElementById('modalUploadZone').style.display = 'block';
+}
+
+async function handleModalImage(input) {
+
+  const file = input.files
+    ? input.files[0]
+    : null;
+
+  if (!file) return;
+
+  showToast('Uploading photo…');
+
+  try {
+
+    const imageUrl =
+      await uploadToCloudinary(file);
+
+    modalImageData = imageUrl;
+
+    document.getElementById(
+      'modalPreviewImg'
+    ).src = imageUrl;
+
+    document.getElementById(
+      'modalPreview'
+    ).style.display = 'block';
+
+    document.getElementById(
+      'modalUploadZone'
+    ).style.display = 'none';
+
+    showToast('Photo uploaded ✦');
+
+  } catch (err) {
+
+    console.error(err);
+
+    showToast('Upload failed');
+
+  }
 }
 
 function saveProduct() {

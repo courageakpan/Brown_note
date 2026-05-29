@@ -3,6 +3,15 @@
 // Products data, cart, toast, cursor, mobile menu
 // ═══════════════════════════════════════════
 
+import {
+  db,
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  deleteDoc
+} from './firebase.js';
+
 // ── Default product catalogue ──
 const DEFAULT_PRODUCTS = [
   {id:1,  brand:'Dior',              name:'Sauvage',              type:'Eau de Parfum',   cat:'him',    price:38000,  sizes:['60ml','100ml','200ml'],      notes:['Bergamot','Ambroxan','Cedar','Pepper'],             desc:'A radically fresh composition — raw and noble all at once. Bergamot from Calabria, pepper, lavender and vetiver create an intensely masculine signature.',                                  tag:'Best Seller', bg:'linear-gradient(150deg,#2a1a0c 0%,#3a2414 60%,#4a3020 100%)', image:null},
@@ -31,19 +40,36 @@ const DEFAULT_PRODUCTS = [
   {id:24, brand:'Viktor & Rolf',     name:'Flowerbomb',           type:'Eau de Parfum',   cat:'her',    price:47000,  sizes:['30ml','50ml','100ml'],         notes:['Jasmine','Rose','Freesia','Patchouli'],              desc:'An explosion of flowers. An oriental floral fragrance that is an antidote to reality — a weapon of mass seduction wrapped in a grenade-shaped bottle.',                                 tag:'New In',      bg:'linear-gradient(150deg,#f0d0dc 0%,#deb0c4 60%,#cc90ac 100%)', image:null},
 ];
 
-// Load products — admin edits stored in localStorage take priority
-function loadProducts() {
-  const stored = localStorage.getItem('products');
-  return stored ? JSON.parse(stored) : DEFAULT_PRODUCTS;
+// FIREBASE LOAD PRODUCTS
+async function loadProducts() {
+  const snapshot = await getDocs(collection(db, "products"));
+
+  const products = [];
+
+  snapshot.forEach((docItem) => {
+    products.push({
+      id: docItem.id,
+      ...docItem.data()
+    });
+  });
+
+  // first launch fallback
+  return products.length ? products : DEFAULT_PRODUCTS;
 }
 
-function saveProducts(products) {
-  try {
-    localStorage.setItem('products', JSON.stringify(products));
-  } catch (e) {
-    console.error('saveProducts failed — localStorage full?', e);
-    throw e; // re-throw so callers can catch it
-  }
+// SAVE SINGLE PRODUCT
+async function saveProductToFirebase(product) {
+  await setDoc(
+    doc(db, "products", String(product.id)),
+    product
+  );
+}
+
+// DELETE PRODUCT
+async function deleteProductFromFirebase(id) {
+  await deleteDoc(
+    doc(db, "products", String(id))
+  );
 }
 
 // ── Cart — persisted in sessionStorage so it survives page navigation ──

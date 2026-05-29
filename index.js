@@ -3,8 +3,8 @@
 let currentFilter = 'all';
 let bannerDismissed = false;
 
-function renderHomeProducts() {
-  const products = loadProducts();
+async function renderHomeProducts() {
+  const products = await loadProducts();
   const filtered = currentFilter === 'all'
     ? products.slice(0, 8)
     : products.filter(p => p.cat === currentFilter).slice(0, 8);
@@ -19,8 +19,8 @@ function filterProducts(btn, cat) {
   renderHomeProducts();
 }
 
-function updateCatCounts() {
-  const products = loadProducts();
+async function updateCatCounts() {
+  const products = await loadProducts();
   const h = document.getElementById('himCount');
   const r = document.getElementById('herCount');
   const u = document.getElementById('unisexCount');
@@ -30,7 +30,7 @@ function updateCatCounts() {
 }
 
 // openDetail on home page — redirect to shop detail
-function openDetail(id) {
+async function openDetail(id) {
   window.location.href = 'shop.html?detail=' + id;
 }
 

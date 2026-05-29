@@ -15,8 +15,8 @@ if (urlCat && ['him','her','unisex','new'].includes(urlCat)) {
 }
 
 
-function renderShop() {
-  const products = loadProducts();
+async function renderShop() {
+  const products = await loadProducts();
   let filtered;
   if (shopCurrentFilter.startsWith('brand:')) {
     const brand = shopCurrentFilter.replace('brand:', '');
@@ -76,8 +76,8 @@ function showDetailView() {
 }
 
 // ── Detail ──
-function openDetail(id) {
-  const products = loadProducts();
+async function openDetail(id) {
+  const products = await loadProducts();
   const p = products.find(x => x.id === id);
   if (!p) return;
   currentDetailId = id;
@@ -109,8 +109,8 @@ function selectSize(btn) {
 }
 
 // ── Cart ──
-function addToCartFromDetail() {
-  const products = loadProducts();
+async function addToCartFromDetail() {
+  const products = await loadProducts();
   const p = products.find(x => x.id === currentDetailId);
   if (!p) return;
   const size = document.querySelector('.detail-size-btn.selected')?.textContent || p.sizes[0];

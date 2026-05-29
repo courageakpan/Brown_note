@@ -2,6 +2,12 @@
 
 const OWNER_PASSWORD_HASH = 'YnJvd25ub3RlMjAyNQ=='; // base64 of "brownnote2025"
 
+import {
+  loadProducts,
+  saveProductToFirebase,
+  deleteProductFromFirebase
+} from "./firebase.js";
+
 async function uploadToCloudinary(file) {
   const formData = new FormData();
 
@@ -62,8 +68,8 @@ function showAdminView(view) {
 }
 
 // ── Product list ──
-function renderAdminList() {
-  const products = loadProducts();
+async function renderAdminList() {
+  const products = await loadProducts();
   const el = document.getElementById('adminProductList');
   const cards = products.map(p => `
     <div class="upload-card">
@@ -122,18 +128,20 @@ async function uploadProductImage(id, input) {
 
     const imageUrl = await uploadToCloudinary(file);
 
-    let products = loadProducts();
+    let products = await loadProducts();
 
     const idx = products.findIndex(x => x.id === id);
 
     if (idx === -1) {
+
       showToast('Product not found');
+
       return;
     }
 
     products[idx].image = imageUrl;
 
-    saveProducts(products);
+    await saveProductToFirebase(products[idx]);
 
     renderAdminList();
 
@@ -147,14 +155,14 @@ async function uploadProductImage(id, input) {
 
   }
 }
+async function deleteProduct(id) {
 
-
-function deleteProduct(id) {
   if (!confirm('Remove this fragrance from your catalogue?')) return;
-  let products = loadProducts();
-  products = products.filter(x => x.id !== id);
-  saveProducts(products);
+
+  await deleteProductFromFirebase(id);
+
   renderAdminList();
+
   showToast('Product removed ✦');
 }
 
@@ -171,8 +179,8 @@ function openAddModal() {
   document.getElementById('addModal').classList.add('open');
 }
 
-function editProduct(id) {
-  const products = loadProducts();
+async function editProduct(id) {
+  const products = await loadProducts();
   const p = products.find(x => x.id === id);
   if (!p) return;
   editingId = id;
@@ -251,39 +259,90 @@ async function handleModalImage(input) {
   }
 }
 
-function saveProduct() {
+async function saveProduct() {
+
   const brand = document.getElementById('mBrand').value.trim();
-  const name  = document.getElementById('mName').value.trim();
-  const price = parseInt(document.getElementById('mPrice').value) || 0;
-  if (!brand || !name || !price) { showToast('Please fill in Brand, Name & Price'); return; }
+
+  const name = document.getElementById('mName').value.trim();
+
+  const price =
+    parseInt(document.getElementById('mPrice').value) || 0;
+
+  if (!brand || !name || !price) {
+
+    showToast('Please fill in Brand, Name & Price');
+
+    return;
+  }
+
   const bgColor = document.getElementById('mBg').value;
-  const bg = `linear-gradient(150deg,${bgColor} 0%,${bgColor}cc 100%)`;
-  const rawSizes = document.getElementById('mSizes').value.split(',').map(s => s.trim()).filter(Boolean);
+
+  const bg =
+    `linear-gradient(150deg,${bgColor} 0%,${bgColor}cc 100%)`;
+
+  const rawSizes =
+    document.getElementById('mSizes')
+      .value
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+
   const data = {
-    brand, name,
-    type:  document.getElementById('mType').value,
-    cat:   document.getElementById('mCat').value,
+
+    brand,
+
+    name,
+
+    type: document.getElementById('mType').value,
+
+    cat: document.getElementById('mCat').value,
+
     price,
-    sizes: rawSizes.length ? rawSizes : ['50ml','100ml'],
-    notes: document.getElementById('mNotes').value.split(',').map(s => s.trim()).filter(Boolean),
-    desc:  document.getElementById('mDesc').value.trim(),
-    tag:   document.getElementById('mTag').value,
+
+    sizes: rawSizes.length
+      ? rawSizes
+      : ['50ml', '100ml'],
+
+    notes:
+      document.getElementById('mNotes')
+        .value
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean),
+
+    desc:
+      document.getElementById('mDesc').value.trim(),
+
+    tag:
+      document.getElementById('mTag').value,
+
     bg,
+
     image: modalImageData
+
   };
 
-  let products = loadProducts();
+
   if (editingId) {
-    const idx = products.findIndex(x => x.id === editingId);
-    if (idx > -1) products[idx] = { ...products[idx], ...data };
+
+    data.id = editingId;
+
+    await saveProductToFirebase(data);
+
     showToast('Fragrance updated ✦');
+
   } else {
+
     data.id = Date.now();
-    products.push(data);
+
+    await saveProductToFirebase(data);
+
     showToast('Fragrance added ✦');
+
   }
-  saveProducts(products);
+
   closeModal();
+
   renderAdminList();
 }
 
@@ -350,17 +409,35 @@ function updateDiscountPreview() {
   }
 }
 
-function renderPromoProductPicker() {
-  const products = loadProducts();
-  document.getElementById('promoProductPicker').innerHTML = products.map(p => `
+async function renderPromoProductPicker() {
+
+  const products = await loadProducts();
+
+  document.getElementById('promoProductPicker').innerHTML =
+    products.map(p => `
+
     <div class="promo-product-pick ${saleProductIds.includes(p.id) ? 'selected' : ''}"
          onclick="toggleSaleProduct(${p.id}, this)">
-      <div class="promo-product-pick-check">${saleProductIds.includes(p.id) ? '✓' : ''}</div>
-      <div>
-        <div class="promo-product-pick-brand">${p.brand}</div>
-        <div class="promo-product-pick-name">${p.name}</div>
+
+      <div class="promo-product-pick-check">
+        ${saleProductIds.includes(p.id) ? '✓' : ''}
       </div>
-    </div>`).join('');
+
+      <div>
+
+        <div class="promo-product-pick-brand">
+          ${p.brand}
+        </div>
+
+        <div class="promo-product-pick-name">
+          ${p.name}
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join('');
 }
 
 function toggleSaleProduct(id, el) {

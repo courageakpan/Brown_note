@@ -3,14 +3,11 @@
 // Products data, cart, toast, cursor, mobile menu
 // ═══════════════════════════════════════════
 
-import {
-  db,
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  deleteDoc
-} from './firebase.js';
+import { 
+        loadProducts,
+        saveProductToFirebase,
+        deleteProductFromFirebase
+ } from './firebase.js';
 
 // ── Default product catalogue ──
 const DEFAULT_PRODUCTS = [
@@ -40,37 +37,6 @@ const DEFAULT_PRODUCTS = [
   {id:24, brand:'Viktor & Rolf',     name:'Flowerbomb',           type:'Eau de Parfum',   cat:'her',    price:47000,  sizes:['30ml','50ml','100ml'],         notes:['Jasmine','Rose','Freesia','Patchouli'],              desc:'An explosion of flowers. An oriental floral fragrance that is an antidote to reality — a weapon of mass seduction wrapped in a grenade-shaped bottle.',                                 tag:'New In',      bg:'linear-gradient(150deg,#f0d0dc 0%,#deb0c4 60%,#cc90ac 100%)', image:null},
 ];
 
-// FIREBASE LOAD PRODUCTS
-async function loadProducts() {
-  const snapshot = await getDocs(collection(db, "products"));
-
-  const products = [];
-
-  snapshot.forEach((docItem) => {
-    products.push({
-      id: docItem.id,
-      ...docItem.data()
-    });
-  });
-
-  // first launch fallback
-  return products.length ? products : DEFAULT_PRODUCTS;
-}
-
-// SAVE SINGLE PRODUCT
-async function saveProductToFirebase(product) {
-  await setDoc(
-    doc(db, "products", String(product.id)),
-    product
-  );
-}
-
-// DELETE PRODUCT
-async function deleteProductFromFirebase(id) {
-  await deleteDoc(
-    doc(db, "products", String(id))
-  );
-}
 
 // ── Cart — persisted in sessionStorage so it survives page navigation ──
 function loadCart() {

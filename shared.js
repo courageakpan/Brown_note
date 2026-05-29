@@ -216,3 +216,27 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
   initCursor();
 });
+
+window.loadProducts = loadProducts;
+window.saveProductToFirebase = saveProductToFirebase;
+window.deleteProductFromFirebase = deleteProductFromFirebase;
+
+window.loadCart = loadCart;
+window.saveCart = saveCart;
+window.updateCartCount = updateCartCount;
+window.checkoutCart = checkoutCart;
+
+window.showToast = showToast;
+window.toggleMobileMenu = toggleMobileMenu;
+
+window.startPress = startPress;
+window.cancelPress = cancelPress;
+
+window.wishlist = wishlist;
+
+window.initCursor = initCursor;
+window.initScrollReveal = initScrollReveal;
+
+window.buildBottleSVG = buildBottleSVG;
+window.buildBottleSVGLarge = buildBottleSVGLarge;
+window.buildCard = buildCard;

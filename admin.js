@@ -543,6 +543,37 @@ document.addEventListener('drop', e => {
   }
 });
 
+// Make functions accessible to HTML onclick
+window.checkLogin = checkLogin;
+window.ownerLogout = ownerLogout;
+window.showAdminView = showAdminView;
+
+window.editProduct = editProduct;
+window.deleteProduct = deleteProduct;
+window.uploadProductImage = uploadProductImage;
+
+window.openAddModal = openAddModal;
+window.closeModal = closeModal;
+
+window.handleModalImage = handleModalImage;
+window.saveProduct = saveProduct;
+
+window.switchPromoTab = switchPromoTab;
+window.pickHeroColor = pickHeroColor;
+window.pickHeroColorCustom = pickHeroColorCustom;
+
+window.updatePromoPreview = updatePromoPreview;
+window.updateBannerPreview = updateBannerPreview;
+window.updateDiscountPreview = updateDiscountPreview;
+
+window.toggleSaleProduct = toggleSaleProduct;
+
+window.saveCampaign = saveCampaign;
+window.saveBanner = saveBanner;
+window.saveDiscounts = saveDiscounts;
+window.saveSaleProducts = saveSaleProducts;
+
+window.clearCampaign = clearCampaign;
 // ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
   // Restore saved campaign state

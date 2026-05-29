@@ -37,6 +37,8 @@ const DEFAULT_PRODUCTS = [
   {id:24, brand:'Viktor & Rolf',     name:'Flowerbomb',           type:'Eau de Parfum',   cat:'her',    price:47000,  sizes:['30ml','50ml','100ml'],         notes:['Jasmine','Rose','Freesia','Patchouli'],              desc:'An explosion of flowers. An oriental floral fragrance that is an antidote to reality — a weapon of mass seduction wrapped in a grenade-shaped bottle.',                                 tag:'New In',      bg:'linear-gradient(150deg,#f0d0dc 0%,#deb0c4 60%,#cc90ac 100%)', image:null},
 ];
 
+let PRODUCTS = [];
+
 
 // ── Cart — persisted in sessionStorage so it survives page navigation ──
 function loadCart() {
@@ -211,10 +213,30 @@ function buildCard(p) {
     </div>`;
 }
 
-// ── Run on every page load ──
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+
+  try {
+
+    // Load from Firebase
+    PRODUCTS = await loadProducts();
+
+    // fallback to defaults
+    if (!PRODUCTS || PRODUCTS.length === 0) {
+      PRODUCTS = DEFAULT_PRODUCTS;
+    }
+
+    console.log('Loaded products:', PRODUCTS);
+
+  } catch (err) {
+
+    console.error('Failed loading products:', err);
+
+    PRODUCTS = DEFAULT_PRODUCTS;
+  }
+
   updateCartCount();
   initCursor();
+
 });
 
 window.loadProducts = loadProducts;

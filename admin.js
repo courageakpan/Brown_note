@@ -196,7 +196,7 @@ async function deleteProduct(id) {
 function openAddModal() {
   editingId = null;
   document.getElementById('modalTitle').textContent = 'Add New Fragrance';
-  ['mBrand','mName','mPrice','mSizes','mNotes','mDesc'].forEach(id => document.getElementById(id).value = '');
+  ['mBrand','mName','mPrice','mSizes','mNotes','mDesc','mVariants'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('mType').value = 'Eau de Parfum';
   document.getElementById('mCat').value  = 'him';
   document.getElementById('mTag').value  = '';
@@ -219,6 +219,10 @@ async function editProduct(id) {
   document.getElementById('mSizes').value = p.sizes.join(', ');
   document.getElementById('mNotes').value = p.notes.join(', ');
   document.getElementById('mDesc').value  = p.desc;
+
+  document.getElementById('mVariants').value =
+  p.variants ? p.variants.join(', ') : '';
+  
   document.getElementById('mTag').value   = p.tag || '';
   const colorMatch = p.bg.match(/#([0-9a-fA-F]{6})/);
   document.getElementById('mBg').value    = colorMatch ? colorMatch[0] : '#3a2818';
@@ -329,6 +333,14 @@ async function saveProduct() {
       ? rawSizes
       : ['50ml', '100ml'],
 
+  // NEW: Variants
+    variants:
+      document.getElementById('mVariants')
+        .value
+        .split(',')
+        .map(v => v.trim())
+        .filter(Boolean),
+
     notes:
       document.getElementById('mNotes')
         .value
@@ -346,7 +358,7 @@ async function saveProduct() {
 
     image: modalImageData
 
-  };
+};
 
 
   if (editingId) {

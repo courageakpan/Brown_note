@@ -296,6 +296,14 @@
         <div class="admin-field"><label>Price (₦) *</label><input id="mPrice" type="number" placeholder="e.g. 38000"></div>
         <div class="admin-field"><label>Sizes (comma separated)</label><input id="mSizes" placeholder="e.g. 50ml, 100ml"></div>
       </div>
+
+      <div class="admin-field" style="margin-bottom:16px;">
+        <label>Available Variants (comma separated)</label>
+        <input
+          id="mVariants"
+          placeholder="e.g. Qaed Al Fursan, Asad Bourbon, Yara Candy">
+      </div>
+
       <div class="admin-field" style="margin-bottom:16px;"><label>Scent Notes (comma separated)</label><input id="mNotes" placeholder="e.g. Bergamot, Ambroxan, Cedar"></div>
       <div class="admin-field" style="margin-bottom:8px;"><label>Description</label><textarea id="mDesc" placeholder="Describe this fragrance..."></textarea></div>
       <div class="admin-form-row">
@@ -303,6 +311,7 @@
         <div class="admin-field"><label>Background Colour</label><input id="mBg" type="color" value="#3a2818" style="height:44px;cursor:pointer !important;"></div>
       </div>
     </div>
+  
     <div class="modal-actions">
       <button class="modal-btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-btn-save" onclick="saveProduct()">Save Fragrance</button>

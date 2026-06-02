@@ -1,12 +1,17 @@
 // admin.js — Admin page logic
 
-const OWNER_PASSWORD_HASH = 'YnJvd25ub3RlMjAyNQ=='; // base64 of "brownnote2025"
-
 import {
   loadProducts,
   saveProductToFirebase,
-  deleteProductFromFirebase
+  deleteProductFromFirebase,
+  auth
 } from "./firebase.js";
+
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function uploadToCloudinary(file) {
   const formData = new FormData();
@@ -38,28 +43,49 @@ let saleProductIds  = [];
 let globalDiscountPct = 0;
 let heroColor       = '#2a1a0e';
 
-// ── Auth ──
-function checkLogin() {
-  const pw = document.getElementById('loginPassword').value;
-  if (btoa(pw) === OWNER_PASSWORD_HASH) {
-    sessionStorage.setItem('owner', 'true');
-    document.getElementById('loginModal').classList.remove('open');
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginError').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
+async function checkLogin() {
+
+  const email =
+    document.getElementById('loginEmail').value;
+
+  const password =
+    document.getElementById('loginPassword').value;
+
+  try {
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    document.getElementById('loginModal')
+      .classList.remove('open');
+
+    document.getElementById('adminPanel')
+      .style.display = 'block';
+
     showAdminView('admin');
+
     renderAdminList();
+
     showToast('Welcome back ✦');
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginPassword').focus();
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById('loginError')
+      .style.display = 'block';
+
   }
 }
 
-function ownerLogout() {
-  sessionStorage.removeItem('owner');
-  window.location.href = '/';
+async function ownerLogout() {
+
+  await signOut(auth);
+
+  window.location.href = "/";
 }
 
 function showAdminView(view) {
@@ -593,12 +619,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Check auth
-  if (sessionStorage.getItem('owner') === 'true') {
-    document.getElementById('adminPanel').style.display = 'block';
+  onAuthStateChanged(auth, user => {
+
+  if (user) {
+
+    document.getElementById('adminPanel')
+      .style.display = 'block';
+
+    document.getElementById('loginModal')
+      .classList.remove('open');
+
     showAdminView('admin');
+
     renderAdminList();
+
   } else {
-    document.getElementById('loginModal').classList.add('open');
-    setTimeout(() => document.getElementById('loginPassword').focus(), 200);
+
+    document.getElementById('loginModal')
+      .classList.add('open');
+
   }
+
+});
+  
 });

@@ -33,6 +33,7 @@ async function updateCatCounts() {
 async function openDetail(id) {
   window.location.href = 'shop.html?detail=' + id;
 }
+window.openDetail = openDetail;
 
 function dismissBanner() {
   document.getElementById('promoBanner').classList.remove('active');

@@ -103,6 +103,7 @@ async function openDetail(id) {
   showDetailView();
 }
 
+
 function selectSize(btn) {
   document.querySelectorAll('.detail-size-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -131,3 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (id) openDetail(id);
   }
 });
+
+window.openDetail = openDetail;
+window.selectSize = selectSize;
+window.addToCartFromDetail = addToCartFromDetail;
+window.showShopView = showShopView;
